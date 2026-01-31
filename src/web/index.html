@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>法条 JSON 解析</title>
+    <style>
+      :root {
+        --bg: #f6f4ee;
+        --ink: #1d1c18;
+        --accent: #365b54;
+        --accent-soft: #d7e2de;
+        --panel: #ffffff;
+        --border: #d8d3c8;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", serif;
+        color: var(--ink);
+        background: radial-gradient(circle at top, #fff7e6, var(--bg));
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+      }
+      h1 {
+        font-size: 28px;
+        margin: 0 0 8px;
+        letter-spacing: 1px;
+      }
+      p.lead {
+        margin: 0 0 24px;
+        color: #4f4a40;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      textarea {
+        width: 100%;
+        min-height: 160px;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      button {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:disabled {
+        background: #9aa7a3;
+        cursor: not-allowed;
+      }
+      .progress {
+        height: 12px;
+        width: 100%;
+        background: var(--accent-soft);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+      .progress > div {
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+        transition: width 0.2s ease;
+      }
+      .status {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #4f4a40;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+        background: #0f1412;
+        color: #e7f6ef;
+        padding: 16px;
+        border-radius: 12px;
+        min-height: 120px;
+        overflow: auto;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      @media (min-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>法条 JSON 解析</h1>
+      <p class="lead">输入一条法条或片段，后台解析为结构化 JSON，并实时显示进度。</p>
+
+      <div class="panel">
+        <label for="lawText">法条文本</label>
+        <textarea id="lawText" placeholder="请输入法条或条款片段..."></textarea>
+        <div style="margin-top: 12px; display: flex; gap: 12px; align-items: center;">
+          <button id="submitBtn">开始解析</button>
+          <span id="taskId"></span>
+        </div>
+        <div class="progress" aria-label="progress">
+          <div id="progressBar"></div>
+        </div>
+        <div class="status" id="statusText">等待输入</div>
+      </div>
+
+      <div class="grid">
+        <div class="panel">
+          <label>结构化 JSON（美化）</label>
+          <pre id="prettyJson">暂无结果</pre>
+        </div>
+        <div class="panel">
+          <label>原始模型输出</label>
+          <pre id="rawText">暂无结果</pre>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const submitBtn = document.getElementById("submitBtn");
+      const lawText = document.getElementById("lawText");
+      const progressBar = document.getElementById("progressBar");
+      const statusText = document.getElementById("statusText");
+      const prettyJson = document.getElementById("prettyJson");
+      const rawText = document.getElementById("rawText");
+      const taskIdEl = document.getElementById("taskId");
+
+      let polling = null;
+
+      function setProgress(pct) {
+        progressBar.style.width = `${pct}%`;
+      }
+
+      async function poll(taskId) {
+        const res = await fetch(`/api/tasks/${taskId}`);
+        const data = await res.json();
+        statusText.textContent = `状态：${data.status}`;
+        setProgress(data.progress || 0);
+
+        if (data.result) {
+          const parsed = data.result.parsed_json;
+          if (parsed) {
+            prettyJson.textContent = JSON.stringify(parsed, null, 2);
+          } else {
+            prettyJson.textContent = "解析 JSON 失败，显示原始输出。";
+          }
+          rawText.textContent = data.result.response_text || "无";
+        }
+
+        if (data.status === "done" || data.status === "error") {
+          submitBtn.disabled = false;
+          if (data.error) {
+            statusText.textContent = `错误：${data.error}`;
+          }
+          clearInterval(polling);
+        }
+      }
+
+      submitBtn.addEventListener("click", async () => {
+        const text = lawText.value.trim();
+        if (!text) {
+          alert("请输入法条文本");
+          return;
+        }
+        submitBtn.disabled = true;
+        statusText.textContent = "提交中...";
+        setProgress(5);
+        prettyJson.textContent = "处理中...";
+        rawText.textContent = "处理中...";
+
+        const res = await fetch("/api/tasks", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ law_text: text })
+        });
+        const data = await res.json();
+        taskIdEl.textContent = `任务：${data.task_id}`;
+        statusText.textContent = "处理中...";
+        setProgress(10);
+        if (polling) clearInterval(polling);
+        polling = setInterval(() => poll(data.task_id), 1000);
+        poll(data.task_id);
+      });
+    </script>
+  </body>
+</html>
