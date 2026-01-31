@@ -1,0 +1,11 @@
+﻿请解析以下法条（或条款片段），并按既定 JSON schema 输出：
+【法条文本开始】
+{LAW_TEXT}
+【法条文本结束】
+
+补充信息（若有）：
+- 法律名称（可空）：{LAW_NAME}
+- 条款编号/章节（可空）：{ARTICLE_LOCATOR}
+- 我关心的业务场景（可空）：{SCENARIO}
+- 是否允许联网检索司法解释/判例：{ALLOW_ONLINE_SEARCH true/false}
+- 若允许检索：优先来源（可空）：{SOURCE_WHITELIST e.g. 最高法官网/裁判文书网/北大法宝/中国法院网}

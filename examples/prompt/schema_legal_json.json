@@ -1,0 +1,50 @@
+﻿{
+  "meta": {
+    "schema_version": "1.0.0",
+    "language": "zh-CN",
+    "generated_at": "ISO-8601",
+    "confidence": 0.0,
+    "notes": []
+  },
+  "input": {
+    "law_text_provided": "",
+    "law_name_guess": "",
+    "article_locator_guess": "",
+    "jurisdiction": "CN",
+    "assumptions": []
+  },
+  "analysis": {
+    "tags": [],
+    "applicability_scope": {
+      "who": [],
+      "where": [],
+      "when": [],
+      "what_relationships": [],
+      "what_matters": [],
+      "thresholds_or_conditions": []
+    },
+    "scenario_questions": [],
+    "core_conclusion": "",
+    "full_law_text": "",
+    "exceptions": [],
+    "related_rules_summary": [],
+    "risk_alerts": []
+  },
+  "references": {
+    "judicial_interpretations": [],
+    "cases": [],
+    "other_authorities": [],
+    "search_trace": {
+      "performed_online_search": false,
+      "query_terms": [],
+      "source_whitelist": [],
+      "time_range": ""
+    }
+  },
+  "action_guide": {
+    "recommended_actions": [],
+    "evidence_checklist": [],
+    "talking_points": [],
+    "escalation_when": []
+  }
+}

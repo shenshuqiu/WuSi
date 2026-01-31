@@ -1,0 +1,77 @@
+﻿{
+  "meta": {
+    "schema_version": "1.0.0",
+    "language": "zh-CN",
+    "generated_at": "2026-01-31T00:00:00Z",
+    "confidence": 0.6,
+    "notes": [
+      "未联网检索，未提供可验证来源。"
+    ]
+  },
+  "input": {
+    "law_text_provided": "用人单位自用工之日起即与劳动者建立劳动关系。\n建立劳动关系，应当订立书面劳动合同。",
+    "law_name_guess": "中华人民共和国劳动合同法",
+    "article_locator_guess": "第十条",
+    "jurisdiction": "CN",
+    "assumptions": []
+  },
+  "analysis": {
+    "tags": ["劳动法", "劳动合同", "劳动关系", "书面合同"],
+    "applicability_scope": {
+      "who": ["用人单位", "劳动者"],
+      "where": ["中华人民共和国境内"],
+      "when": ["用工开始之日"],
+      "what_relationships": ["劳动关系"],
+      "what_matters": ["是否实际用工", "是否签订书面劳动合同"],
+      "thresholds_or_conditions": []
+    },
+    "scenario_questions": [
+      "已用工但未签劳动合同是否违法？",
+      "劳动关系从何时起算？"
+    ],
+    "core_conclusion": "用人单位自用工之日起即与劳动者建立劳动关系，并应当订立书面劳动合同；未订立可能触发相应法律责任。",
+    "full_law_text": "用人单位自用工之日起即与劳动者建立劳动关系。\n建立劳动关系，应当订立书面劳动合同。",
+    "exceptions": [],
+    "related_rules_summary": [
+      "劳动关系成立以事实用工为核心，书面合同属于法定要求。"
+    ],
+    "risk_alerts": [
+      "未及时订立书面劳动合同可能导致用人单位承担赔偿或补偿风险。"
+    ]
+  },
+  "references": {
+    "judicial_interpretations": [],
+    "cases": [],
+    "other_authorities": [],
+    "search_trace": {
+      "performed_online_search": false,
+      "query_terms": [],
+      "source_whitelist": [],
+      "time_range": ""
+    }
+  },
+  "action_guide": {
+    "recommended_actions": [
+      {
+        "scenario": "用人单位已用工但未签劳动合同",
+        "steps": [
+          "立即与劳动者补签书面劳动合同，明确岗位、期限、薪酬与工时。",
+          "补齐入职资料与规章制度签收记录。",
+          "核对社保公积金缴纳情况并补缴情形。"
+        ]
+      }
+    ],
+    "evidence_checklist": [
+      "入职通知与岗位说明",
+      "考勤或排班记录",
+      "工资发放记录"
+    ],
+    "talking_points": [
+      "劳动关系从用工之日起建立，合同是法定要件。"
+    ],
+    "escalation_when": [
+      "出现劳动争议或被投诉时",
+      "存在未签合同超过法定期限的情形"
+    ]
+  }
+}
