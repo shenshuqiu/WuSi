@@ -5,9 +5,9 @@
 ## Requirements
 - Python 3.10+
 
-## Install
+## Install (uv)
 ```
-pip install -r requirements.txt
+uv sync
 ```
 
 ## Prepare files
@@ -21,11 +21,16 @@ pip install -r requirements.txt
 
 ## Run
 ```
-python -m src.main ^
-  --prompt-file .\examples\prompt\system_legal_json.txt ^
-  --input-file .\examples\input\inputs.jsonl ^
-  --output-file .\examples\output\outputs.jsonl ^
-  --model <your-model-name>
+uv run python -m src.main
+```
+
+Optional overrides:
+```
+uv run python -m src.main ^
+  --prompt-file .\\examples\\prompt\\system_legal_json.txt ^
+  --input-file .\\examples\\input\\inputs.jsonl ^
+  --output-file .\\examples\\output\\outputs.jsonl ^
+  --model Pro/deepseek-ai/DeepSeek-V3.2
 ```
 
 ## Example files (Legal JSON)
@@ -40,6 +45,7 @@ python -m src.main ^
 Environment variables:
 - `SILICONFLOW_API_KEY` (required unless `--api-key` provided)
 - `SILICONFLOW_BASE_URL` (optional, default `https://api.siliconflow.cn`)
+- `SILICONFLOW_MODEL` (optional, default `Pro/deepseek-ai/DeepSeek-V3.2`)
 
 ## Output
 Writes JSONL with fields:

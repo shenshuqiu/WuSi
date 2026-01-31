@@ -1,0 +1,12 @@
+﻿[project]
+name = "wusi-legal-json-batch"
+version = "0.1.0"
+description = "Batch legal clause to strict JSON via AI API"
+requires-python = ">=3.10"
+dependencies = [
+  "httpx==0.27.2",
+]
+
+[tool.uv]
+# uv will manage the environment and lockfile
+

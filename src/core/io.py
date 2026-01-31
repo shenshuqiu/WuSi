@@ -6,7 +6,7 @@ from src.core.models import InputItem, OutputItem
 
 
 def load_prompt(path: str) -> str:
-    text = Path(path).read_text(encoding="utf-8").strip()
+    text = Path(path).read_text(encoding="utf-8-sig").strip()
     if not text:
         raise ValueError("Prompt file is empty.")
     return text
@@ -14,7 +14,7 @@ def load_prompt(path: str) -> str:
 
 def _load_jsonl(path: Path) -> list[dict[str, Any]]:
     items: list[dict[str, Any]] = []
-    with path.open("r", encoding="utf-8") as handle:
+    with path.open("r", encoding="utf-8-sig") as handle:
         for line_no, line in enumerate(handle, start=1):
             line = line.strip()
             if not line:
@@ -43,7 +43,7 @@ def load_inputs(path: str) -> list[InputItem]:
             items.append(InputItem(id=item_id, text=text, messages=messages))
         return items
 
-    lines = input_path.read_text(encoding="utf-8").splitlines()
+    lines = input_path.read_text(encoding="utf-8-sig").splitlines()
     items = []
     for index, line in enumerate(lines, start=1):
         line = line.strip()

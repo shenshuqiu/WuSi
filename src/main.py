@@ -20,7 +20,7 @@ def build_config(args: argparse.Namespace) -> AppConfig:
         or "https://api.siliconflow.cn"
     )
 
-    model = args.model or os.getenv("SILICONFLOW_MODEL")
+    model = args.model or os.getenv("SILICONFLOW_MODEL") or "Pro/deepseek-ai/DeepSeek-V3.2"
     if not model:
         raise ValueError("Missing model. Set SILICONFLOW_MODEL or use --model.")
 
@@ -37,10 +37,22 @@ def build_config(args: argparse.Namespace) -> AppConfig:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Batch chat completions client.")
-    parser.add_argument("--prompt-file", required=True, help="System prompt file path.")
-    parser.add_argument("--input-file", required=True, help="Input file path.")
-    parser.add_argument("--output-file", required=True, help="Output JSONL file path.")
-    parser.add_argument("--model", help="Model name.")
+    parser.add_argument(
+        "--prompt-file",
+        default="examples/prompt/system_legal_json.txt",
+        help="System prompt file path.",
+    )
+    parser.add_argument(
+        "--input-file",
+        default="examples/input/inputs.jsonl",
+        help="Input file path.",
+    )
+    parser.add_argument(
+        "--output-file",
+        default="examples/output/outputs.jsonl",
+        help="Output JSONL file path.",
+    )
+    parser.add_argument("--model", default="Pro/deepseek-ai/DeepSeek-V3.2", help="Model name.")
     parser.add_argument("--api-key", help="API key override.")
     parser.add_argument("--base-url", help="Base URL override.")
     parser.add_argument(
