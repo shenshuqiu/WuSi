@@ -15,3 +15,4 @@ class OutputItem:
     input_text: str | None
     response_text: str | None
     raw_response: dict[str, Any] | None
+    error: str | None = None

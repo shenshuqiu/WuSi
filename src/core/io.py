@@ -62,25 +62,44 @@ def write_outputs(path: str, outputs: list[OutputItem]) -> None:
                 "input": item.input_text,
                 "response_text": item.response_text,
                 "raw_response": item.raw_response,
+                "error": item.error,
             }
             handle.write(json.dumps(payload, ensure_ascii=False) + "\n")
 
 
+def _extract_json_from_text(text: str) -> dict[str, Any] | None:
+    text = text.strip()
+    if not text:
+        return None
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+    start = text.find("{")
+    end = text.rfind("}")
+    if start == -1 or end == -1 or end <= start:
+        return None
+    try:
+        return json.loads(text[start : end + 1])
+    except json.JSONDecodeError:
+        return None
+
+
 def write_pretty_outputs(path: str, outputs: list[OutputItem]) -> None:
     output_path = Path(path)
-    with output_path.open("w", encoding="utf-8") as handle:
-        for item in outputs:
-            parsed_json = None
-            if item.response_text:
-                try:
-                    parsed_json = json.loads(item.response_text)
-                except json.JSONDecodeError:
-                    parsed_json = None
-            payload = {
+    pretty_items: list[dict[str, Any]] = []
+    for item in outputs:
+        parsed_json = None
+        if item.response_text:
+            parsed_json = _extract_json_from_text(item.response_text)
+        pretty_items.append(
+            {
                 "id": item.id,
                 "input": item.input_text,
                 "parsed_json": parsed_json,
-                "response_text": item.response_text,
+                "error": item.error,
             }
-            handle.write(json.dumps(payload, ensure_ascii=False, indent=2))
-            handle.write("\n\n")
+        )
+
+    with output_path.open("w", encoding="utf-8-sig") as handle:
+        handle.write(json.dumps(pretty_items, ensure_ascii=False, indent=2))

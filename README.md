@@ -33,12 +33,15 @@ uv run python -m src.main ^
   --model Pro/deepseek-ai/DeepSeek-V3.2 ^
   --max-tokens 1200 ^
   --temperature 0.2 ^
-  --top-p 0.9
+  --top-p 0.9 ^
+  --timeout 180
 ```
 
 Readable output:
 - 仍然输出 JSONL：`examples/output/outputs.jsonl`
 - 额外输出美化版 JSON：`examples/output/outputs_pretty.json`
+- 单条失败会记录在 `error` 字段，不影响其他条目
+- 美化版为标准 JSON 数组，默认只保留 `parsed_json` 便于阅读
 
 Progress logs (stderr):
 - 默认会输出每条任务的 start/done/error，以及总体进度

@@ -54,7 +54,13 @@ async def _process_one(
         except Exception as exc:
             elapsed = time.perf_counter() - started
             await log_fn(f"error id={item.id} elapsed={elapsed:.2f}s err={exc}")
-            raise
+            return OutputItem(
+                id=item.id,
+                input_text=item.text,
+                response_text=None,
+                raw_response=None,
+                error=str(exc),
+            )
 
 
 async def run_batch(
