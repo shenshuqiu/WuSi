@@ -30,7 +30,10 @@ uv run python -m src.main ^
   --prompt-file .\\examples\\prompt\\system_legal_json.txt ^
   --input-file .\\examples\\input\\inputs.jsonl ^
   --output-file .\\examples\\output\\outputs.jsonl ^
-  --model Pro/deepseek-ai/DeepSeek-V3.2
+  --model Pro/deepseek-ai/DeepSeek-V3.2 ^
+  --max-tokens 1200 ^
+  --temperature 0.2 ^
+  --top-p 0.9
 ```
 
 Progress logs (stderr):
@@ -50,6 +53,10 @@ Environment variables:
 - `SILICONFLOW_API_KEY` (required unless `--api-key` provided)
 - `SILICONFLOW_BASE_URL` (optional, default `https://api.siliconflow.cn`)
 - `SILICONFLOW_MODEL` (optional, default `Pro/deepseek-ai/DeepSeek-V3.2`)
+
+More detailed output:
+- 默认已提高 `max_tokens=1200`，并设置 `temperature=0.2`、`top_p=0.9`
+- 需要更长输出可继续调大 `--max-tokens`
 
 ## Output
 Writes JSONL with fields:

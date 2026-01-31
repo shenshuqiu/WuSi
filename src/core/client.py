@@ -22,6 +22,9 @@ class ChatClient:
         payload = {
             "model": self._config.model,
             "messages": messages,
+            "max_tokens": self._config.max_tokens,
+            "temperature": self._config.temperature,
+            "top_p": self._config.top_p,
         }
 
         url = self._config.base_url.rstrip("/") + self._config.endpoint

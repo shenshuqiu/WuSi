@@ -12,3 +12,6 @@ class AppConfig:
     max_retries: int
     verbose: bool
     progress_every: int
+    max_tokens: int
+    temperature: float
+    top_p: float

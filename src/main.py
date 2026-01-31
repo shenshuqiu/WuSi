@@ -34,6 +34,9 @@ def build_config(args: argparse.Namespace) -> AppConfig:
         max_retries=args.max_retries,
         verbose=not args.quiet,
         progress_every=args.progress_every,
+        max_tokens=args.max_tokens,
+        temperature=args.temperature,
+        top_p=args.top_p,
     )
 
 
@@ -65,6 +68,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--concurrency", type=int, default=5, help="Concurrency.")
     parser.add_argument("--timeout", type=int, default=60, help="Request timeout.")
     parser.add_argument("--max-retries", type=int, default=3, help="Max retries.")
+    parser.add_argument("--max-tokens", type=int, default=1200, help="Max tokens.")
+    parser.add_argument("--temperature", type=float, default=0.2, help="Temperature.")
+    parser.add_argument("--top-p", type=float, default=0.9, help="Top-p.")
     parser.add_argument(
         "--progress-every",
         type=int,
