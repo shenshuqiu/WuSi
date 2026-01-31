@@ -32,6 +32,8 @@ def build_config(args: argparse.Namespace) -> AppConfig:
         concurrency=args.concurrency,
         timeout_seconds=args.timeout,
         max_retries=args.max_retries,
+        verbose=not args.quiet,
+        progress_every=args.progress_every,
     )
 
 
@@ -63,6 +65,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--concurrency", type=int, default=5, help="Concurrency.")
     parser.add_argument("--timeout", type=int, default=60, help="Request timeout.")
     parser.add_argument("--max-retries", type=int, default=3, help="Max retries.")
+    parser.add_argument(
+        "--progress-every",
+        type=int,
+        default=1,
+        help="Log progress every N completed items.",
+    )
+    parser.add_argument("--quiet", action="store_true", help="Disable progress logs.")
     return parser.parse_args(argv)
 
 
@@ -74,7 +83,13 @@ async def main_async(argv: list[str]) -> int:
     inputs = load_inputs(args.input_file)
 
     client = ChatClient(config)
-    results = await run_batch(client, prompt, inputs)
+    results = await run_batch(
+        client,
+        prompt,
+        inputs,
+        verbose=config.verbose,
+        progress_every=config.progress_every,
+    )
     write_outputs(args.output_file, results)
     return 0
 

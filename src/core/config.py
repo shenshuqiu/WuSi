@@ -10,3 +10,5 @@ class AppConfig:
     concurrency: int
     timeout_seconds: int
     max_retries: int
+    verbose: bool
+    progress_every: int

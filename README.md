@@ -33,6 +33,10 @@ uv run python -m src.main ^
   --model Pro/deepseek-ai/DeepSeek-V3.2
 ```
 
+Progress logs (stderr):
+- 默认会输出每条任务的 start/done/error，以及总体进度
+- 如需静默：加 `--quiet`
+
 ## Example files (Legal JSON)
 - System prompt: `examples/prompt/system_legal_json.txt`
 - User prompt template: `examples/prompt/user_legal_json.txt`
