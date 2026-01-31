@@ -5,7 +5,7 @@ import sys
 
 from src.core.client import ChatClient
 from src.core.config import AppConfig
-from src.core.io import load_inputs, load_prompt, write_outputs
+from src.core.io import load_inputs, load_prompt, write_outputs, write_pretty_outputs
 from src.core.runner import run_batch
 
 
@@ -57,6 +57,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default="examples/output/outputs.jsonl",
         help="Output JSONL file path.",
     )
+    parser.add_argument(
+        "--pretty-output-file",
+        default="examples/output/outputs_pretty.json",
+        help="Pretty output file path.",
+    )
     parser.add_argument("--model", default="Pro/deepseek-ai/DeepSeek-V3.2", help="Model name.")
     parser.add_argument("--api-key", help="API key override.")
     parser.add_argument("--base-url", help="Base URL override.")
@@ -97,6 +102,8 @@ async def main_async(argv: list[str]) -> int:
         progress_every=config.progress_every,
     )
     write_outputs(args.output_file, results)
+    if args.pretty_output_file:
+        write_pretty_outputs(args.pretty_output_file, results)
     return 0
 
 

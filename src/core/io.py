@@ -64,3 +64,23 @@ def write_outputs(path: str, outputs: list[OutputItem]) -> None:
                 "raw_response": item.raw_response,
             }
             handle.write(json.dumps(payload, ensure_ascii=False) + "\n")
+
+
+def write_pretty_outputs(path: str, outputs: list[OutputItem]) -> None:
+    output_path = Path(path)
+    with output_path.open("w", encoding="utf-8") as handle:
+        for item in outputs:
+            parsed_json = None
+            if item.response_text:
+                try:
+                    parsed_json = json.loads(item.response_text)
+                except json.JSONDecodeError:
+                    parsed_json = None
+            payload = {
+                "id": item.id,
+                "input": item.input_text,
+                "parsed_json": parsed_json,
+                "response_text": item.response_text,
+            }
+            handle.write(json.dumps(payload, ensure_ascii=False, indent=2))
+            handle.write("\n\n")

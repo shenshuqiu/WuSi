@@ -36,6 +36,10 @@ uv run python -m src.main ^
   --top-p 0.9
 ```
 
+Readable output:
+- 仍然输出 JSONL：`examples/output/outputs.jsonl`
+- 额外输出美化版 JSON：`examples/output/outputs_pretty.json`
+
 Progress logs (stderr):
 - 默认会输出每条任务的 start/done/error，以及总体进度
 - 如需静默：加 `--quiet`
